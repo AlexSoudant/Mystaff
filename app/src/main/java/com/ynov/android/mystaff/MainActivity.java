@@ -1,13 +1,13 @@
 package com.ynov.android.mystaff;
 
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.ynov.android.mystaff.utilities.NetworkUtils;
+import com.ynov.android.mystaff.utilities.SlackJsonUtils;
 
-import java.io.IOException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 String jsonSlackResponse = NetworkUtils.getReponseFromHttpUrl(slackRequestUrl);
 
-                String[] simpleJsonSlackData = OpenSlackJsonUtils
-                        .getSimpleSlackStringsFromJson(MainActivity.this, jsonSlackResponse);
+                String simpleJsonSlackData = SlackJsonUtils
+                        .getSimpleSlackStringsFromJson(jsonSlackResponse);
 
                 return simpleJsonSlackData;
 
