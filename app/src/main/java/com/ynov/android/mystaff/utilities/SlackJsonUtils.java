@@ -1,5 +1,6 @@
 package com.ynov.android.mystaff.utilities;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,12 +12,10 @@ import java.net.HttpURLConnection;
 
 public class SlackJsonUtils {
 
-    public static String getSimpleSlackStringsFromJson(String slackJsonStr)
+    public static String[] getSimpleSlackStringsFromJson(String slackJsonStr, String channel)
             throws JSONException {
 
         final String S_MESSAGE_CODE = "cod";
-        /* String array to hold the staff list in JSON format from Slack API */
-        String[] parsedSlackData = null;
 
         JSONObject slackJson = new JSONObject(slackJsonStr);
 
@@ -35,17 +34,18 @@ public class SlackJsonUtils {
             }
         }
 
+        JSONArray slackArray = slackJson.getJSONArray("channels");
 
-        String members;
+        String[] staffList = new String[slackArray.length()];
 
-        members = slackJson.getString("members");
+        for (int i = 0; i < slackArray.length(); i++) {
+            if(slackArray.getJSONObject(i).getString("name")== channel ){
+                staffList[i] = slackArray.getJSONObject(i).getString("members");
+            }
 
-        return members;
+
+        }
+
+        return staffList;
     }
-
-
-
-
-
-
 }

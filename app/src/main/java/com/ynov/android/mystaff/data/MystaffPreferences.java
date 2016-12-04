@@ -17,7 +17,7 @@ public class MystaffPreferences {
  */
     private static final String DEFAULT_CHANNEL_NAME = "beacons";
 
-    private static String getDefaultWeatherLocation() {
+    public static String getDefaultSlackChannel() {
         /** This will be implemented in a future lesson **/
         return DEFAULT_CHANNEL_NAME;
     }

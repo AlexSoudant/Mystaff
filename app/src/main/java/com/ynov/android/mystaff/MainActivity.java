@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.ynov.android.mystaff.data.MystaffPreferences;
 import com.ynov.android.mystaff.utilities.NetworkUtils;
 import com.ynov.android.mystaff.utilities.SlackJsonUtils;
 
@@ -25,19 +26,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void loadSlackData() {
-        new SlackQueryTask().execute();
+        String channel = MystaffPreferences.getDefaultSlackChannel();
+        new SlackQueryTask().execute(channel);
     }
 
-    public class SlackQueryTask extends AsyncTask<String,Void,String>{
+    public class SlackQueryTask extends AsyncTask<String,Void,String[]>{
         @Override
-        protected String doInBackground(String... params) {
+        protected String[] doInBackground(String... params) {
             String channel = params[0];
             URL slackRequestUrl = NetworkUtils.buildUrl(channel);
             try {
                 String jsonSlackResponse = NetworkUtils.getReponseFromHttpUrl(slackRequestUrl);
 
-                String simpleJsonSlackData = SlackJsonUtils
-                        .getSimpleSlackStringsFromJson(jsonSlackResponse);
+                String[] simpleJsonSlackData = SlackJsonUtils
+                        .getSimpleSlackStringsFromJson(jsonSlackResponse,channel);
 
                 return simpleJsonSlackData;
 
@@ -48,9 +50,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String slackSearchResults) {
+        protected void onPostExecute(String[] slackSearchResults) {
             if (slackSearchResults != null && !slackSearchResults.equals("")){
-                mStaff_list.setText(slackSearchResults);
+                for(String slackstring : slackSearchResults){
+                    mStaff_list.append((slackSearchResults)+ "\n\n\n");
+                }
+
             }
         }
     }
