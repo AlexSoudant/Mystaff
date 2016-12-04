@@ -35,15 +35,26 @@ public class SlackJsonUtils {
         }
 
         JSONArray slackArray = slackJson.getJSONArray("channels");
+        JSONArray staffListArray = new JSONArray();
 
-        String[] staffList = new String[slackArray.length()];
 
         for (int i = 0; i < slackArray.length(); i++) {
-            if(slackArray.getJSONObject(i).getString("name")== channel ){
-                staffList[i] = slackArray.getJSONObject(i).getString("members");
+
+            JSONObject slackChannel = slackArray.getJSONObject(i);
+
+            if(slackChannel.getString("name") == channel ){
+
+            staffListArray = slackChannel.getJSONArray("members");
+                //staffList[i] = slackArray.getJSONObject(i).getString("members");
+
             }
 
+        }
 
+        String[] staffList = new String[staffListArray.length()];
+
+        for (int j = 0; j < staffListArray.length(); j++){
+            staffList[j] = staffListArray.getJSONObject(j).toString();
         }
 
         return staffList;
