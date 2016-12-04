@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String[] slackSearchResults) {
             if (slackSearchResults != null && !slackSearchResults.equals("")){
-                for(String slackstring : slackSearchResults){
-                    mStaff_list.append((slackSearchResults)+ "\n\n\n");
+                for(String slackString : slackSearchResults){
+                    mStaff_list.append((slackString)+ "\n\n\n");
                 }
 
             }
