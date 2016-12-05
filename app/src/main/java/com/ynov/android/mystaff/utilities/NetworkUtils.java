@@ -6,8 +6,6 @@ package com.ynov.android.mystaff.utilities;
 
 import android.net.Uri;
 
-import com.ynov.android.mystaff.MainActivity;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -24,13 +22,13 @@ public final class NetworkUtils {
 
     private static final String STATIC_SLACK_URL_CHANNEL = "https://slack.com/api/channels.list?";
 
-    private static final String STATIC_SLACK_URL_PRESENCE = "https://slack.com/api/users.getPresence?";
+    private static final String STATIC_SLACK_URL_PRESENCE = "https://slack.com/api/users.list?";
 
     final static  String SLACK_API_TOKEN = "token";
 
     final static String QUERY_PARAM_PRETTY = "pretty";
 
-    final static String QUERY_PARAM_ID_MEMBERS = "user";
+    final static String QUERY_PARAM_PRESENCE = "presence";
 
 
     /**
@@ -57,18 +55,16 @@ public final class NetworkUtils {
     }
 
     /**
-     * Builds the URL used to talk to the Slack server. QUERY_PARAM_ID_MEMBERS retrieve the
+     * Builds the URL used to talk to the Slack server. QUERY_PARAM_PRESENCE retrieve the
      * presence status of the wanted users.
-     *
-     * @param User the user to query the presence for.
      * @return The Url to use to query the Slack server.
      */
 
-    public static URL buildUrlPresence(String user){
+    public static URL buildUrlPresence(){
         Uri buildUri = Uri.parse(STATIC_SLACK_URL_PRESENCE).buildUpon()
                 .appendQueryParameter(SLACK_API_TOKEN, com.ynov.android.mystaff.BuildConfig.OPEN_SLACK_API_KEY)
+                .appendQueryParameter(QUERY_PARAM_PRESENCE, "presence")
                 .appendQueryParameter(QUERY_PARAM_PRETTY, "1")
-                .appendQueryParameter(QUERY_PARAM_ID_MEMBERS, user)
                 .build();
         URL Url = null;
         try{

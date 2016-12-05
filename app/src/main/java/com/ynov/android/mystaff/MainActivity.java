@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                         .getSimpleSlackStringsFromJson(jsonSlackResponse, channel);
 
                 String[] users = simpleJsonSlackData;
-                String[] simpleJsonPresenceData = {};
+                String[] simpleJsonPresenceData = {"aaa","aaa"};
 
                 for (int i = 0; i < users.length; i++) {
 
