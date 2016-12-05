@@ -37,7 +37,6 @@ public class SlackJsonUtils {
         JSONArray slackArray = slackJson.getJSONArray("channels");
         JSONArray staffListArray = new JSONArray();
         JSONObject slackChannel = new JSONObject();
-        String members_list = "";
 
         for (int i = 0; i < slackArray.length(); i++) {
 
@@ -54,13 +53,10 @@ public class SlackJsonUtils {
         String[] staffList = new String[staffListArray.length()];
 
         for (int j = 0; j < staffListArray.length(); j++){
-            staffList[j] = staffListArray.getJSONObject(j).toString();
+            staffList[j] = staffListArray.getString(j);
         }
 
-        //staffList = new String[]{"aa","aa","aa","aa"};
 
-
-        return new String[]{staffListArray.toString()};
-        //return staffList;
+        return staffList;
     }
 }
