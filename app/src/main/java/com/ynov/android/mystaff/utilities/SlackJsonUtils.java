@@ -59,4 +59,33 @@ public class SlackJsonUtils {
 
         return staffList;
     }
+
+    public static String getPresenceFromStaffList(String presenceJsonStr)
+            throws JSONException {
+
+        final String S_MESSAGE_CODE = "cod";
+
+        JSONObject presenceJson = new JSONObject(presenceJsonStr);
+
+        /*is there an error? */
+        if (presenceJson.has(S_MESSAGE_CODE)) {
+            int errorCode = presenceJson.getInt(S_MESSAGE_CODE);
+            switch (errorCode) {
+                case HttpURLConnection.HTTP_OK:
+                    break;
+                case HttpURLConnection.HTTP_NOT_FOUND:
+                    /* channel invalid*/
+                    return null;
+                /* Slack server down */
+                default:
+                    return null;
+            }
+        }
+
+        String presenceString = presenceJson.getString("presence");
+        return presenceString;
+    }
+
+
+
 }

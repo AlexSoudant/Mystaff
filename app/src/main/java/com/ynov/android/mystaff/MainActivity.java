@@ -39,24 +39,44 @@ public class MainActivity extends AppCompatActivity {
                 String jsonSlackResponse = NetworkUtils.getReponseFromHttpUrl(slackRequestUrl);
 
                 String[] simpleJsonSlackData = SlackJsonUtils
-                        .getSimpleSlackStringsFromJson(jsonSlackResponse,channel);
+                        .getSimpleSlackStringsFromJson(jsonSlackResponse, channel);
 
-                return simpleJsonSlackData;
+                String[] users = simpleJsonSlackData;
+                String[] simpleJsonPresenceData = {};
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
+                for (int i = 0; i < users.length; i++) {
+
+                    URL presenceRequestUrl = NetworkUtils.buildUrlPresence(users[i]);
+
+                    String jsonPresenceResponse = NetworkUtils.getReponseFromHttpUrl(presenceRequestUrl);
+
+                    simpleJsonPresenceData[i] = SlackJsonUtils
+                            .getPresenceFromStaffList(jsonPresenceResponse);
+
+                }
+
+                return simpleJsonPresenceData;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+
         }
 
         @Override
         protected void onPostExecute(String[] slackSearchResults) {
             if (slackSearchResults != null && !slackSearchResults.equals("")){
                 for(String slackString : slackSearchResults){
+
                     mStaff_list.append((slackString)+ "\n\n\n");
                 }
 
             }
         }
+
+
     }
+
+
 }
