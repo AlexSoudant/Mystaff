@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
         new SlackQueryTask().execute(channel);
     }
 
-    public class SlackQueryTask extends AsyncTask<String,Void,String[]>{
+    public class SlackQueryTask extends AsyncTask<String,Void,Object[]>{
         @Override
-        protected String[] doInBackground(String... params) {
+        protected Object[] doInBackground(String... params) {
             String channel = params[0];
             URL slackRequestUrl = NetworkUtils.buildUrl(channel);
             try {
@@ -41,19 +41,12 @@ public class MainActivity extends AppCompatActivity {
                 String[] simpleJsonSlackData = SlackJsonUtils
                         .getSimpleSlackStringsFromJson(jsonSlackResponse, channel);
 
-                String[] users = simpleJsonSlackData;
-                String[] simpleJsonPresenceData = {"aaa","aaa"};
+                URL presenceRequestUrl = NetworkUtils.buildUrlPresence();
 
-                for (int i = 0; i < users.length; i++) {
+                String jsonPresenceResponse = NetworkUtils.getReponseFromHttpUrl(presenceRequestUrl);
 
-                    URL presenceRequestUrl = NetworkUtils.buildUrlPresence(users[i]);
-
-                    String jsonPresenceResponse = NetworkUtils.getReponseFromHttpUrl(presenceRequestUrl);
-
-                    simpleJsonPresenceData[i] = SlackJsonUtils
-                            .getPresenceFromStaffList(jsonPresenceResponse);
-
-                }
+                Object[] simpleJsonPresenceData = SlackJsonUtils
+                            .getPresenceFromStaffList(jsonPresenceResponse, simpleJsonSlackData);
 
                 return simpleJsonPresenceData;
 
@@ -65,11 +58,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String[] slackSearchResults) {
+        protected void onPostExecute(Object[] slackSearchResults) {
             if (slackSearchResults != null && !slackSearchResults.equals("")){
-                for(String slackString : slackSearchResults){
-
-                    mStaff_list.append((slackString)+ "\n\n\n");
+                String[] membersRealNames = (String[])slackSearchResults[0];
+                String[] membersPresence = (String[])slackSearchResults[1];
+                for(int i = 0; i < membersRealNames.length; i++){
+                        mStaff_list.append((membersRealNames[i])+ "\n" + (membersPresence[i]) + "\n\n\n");
                 }
 
             }

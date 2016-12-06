@@ -60,7 +60,7 @@ public class SlackJsonUtils {
         return staffList;
     }
 
-    public static String getPresenceFromStaffList(String presenceJsonStr)
+    public static Object[] getPresenceFromStaffList(String presenceJsonStr,String[] stafflist)
             throws JSONException {
 
         final String S_MESSAGE_CODE = "cod";
@@ -82,10 +82,30 @@ public class SlackJsonUtils {
             }
         }
 
-        String presenceString = presenceJson.getString("presence");
-        return presenceString;
+        JSONArray presenceMembersArray = presenceJson.getJSONArray("members");
+        String[] memberRealName = new String[stafflist.length];
+        String[] memberPresence = new String[stafflist.length];
+
+        for(int i = 0; i < presenceMembersArray.length(); i++){
+
+            JSONObject memberObject = presenceMembersArray.getJSONObject(i);
+
+            String memberID = memberObject.getString("id");
+
+            for(int j = 0; j < stafflist.length;j++){
+                if (stafflist[j].equals(memberID)){
+                    memberRealName[j] = memberObject.getString("real_name");
+                    memberPresence[j] = memberObject.getString("presence");
+                }
+            }
+
+        }
+
+        Object[] resultObject = new Object[2];
+        resultObject[0] = memberRealName;
+        resultObject[1] = memberPresence;
+
+        return resultObject;
     }
-
-
 
 }
